@@ -28,7 +28,7 @@ docker pull "${DOCKER_NAME}:${DIST}" 2>/dev/null 1>&2 || true
 CURRENTLAST="$(docker inspect --format='{{ index .Config.Labels "last_modified_src"}}' \
                       "${DOCKER_NAME}:${DIST}" 2>/dev/null||echo 'non-existent')"
 
-if [ "x${CURRENTLAST}" == "x${LASTMOD}" ] ; then
+if [ "${CURRENTLAST}" == "${LASTMOD}" ] ; then
     echo "Rebuild not needed - upstream has last modification ${LASTMOD}."
     exit 1
 else
