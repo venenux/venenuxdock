@@ -23,12 +23,28 @@ the page at [oficial Debian Extended Long Term Support wiki page](https://wiki.d
 
 ## Usage
 
+To use the VenenuX images just requested from docker hub:
+
 ```
 general@venenux:~$ docker run --rm -it venenux/venenux-debianok:etch
 sh-3.1# cat /etc/debian_version
 4.0
 ```
 
-## Source
+To build your own new image inside just clone the repo and build it:
 
-Everything is hosted on [github](https://github.com/venenux/venenuxdock).
+```
+apt-get install docker.io shellcheck ca-certificates cgroupfs-mount git xz-utils
+mkdir ~/Devel && cd Devel && git clone https://codeberg.org/venenux/venenuxdock && cd ~/Devel/venenuxdock
+make
+```
+
+## LICENSE
+
+Originally improved from madworx's old debian images, but he never put a LICENSE file, 
+so we are not forced to put references but we just mention it here, the new one is 
+**CC-BY-SA-NC over this files and GPLv3 over the products (Docker images)**.
+
+* (c) 2020 Martin Kjellstrand
+* (c) 2023+ PICCORO Lenz McKAY
+

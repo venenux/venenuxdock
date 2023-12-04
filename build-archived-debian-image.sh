@@ -3,6 +3,16 @@
 set -eE
 set -o pipefail
 
+if ! command -v docker > /dev/null; then
+    echo "[ERROR] Docker is not installed, cannot continue! make apt-get install docker.io"
+    exit 1
+fi
+
+if ! command -v shellcheck > /dev/null; then
+    echo "[ERROR] Shellcheck is not installed, cannot continue! make apt-get install shellcheck"
+    exit 1
+fi
+
 export DIST=${1:-etch}
 export DOCKER_NAME=${2:-venenux/venenux-debianok}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
