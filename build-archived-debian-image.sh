@@ -5,10 +5,10 @@ set -o pipefail
 
 export DIST=${1:-etch}
 export DOCKER_NAME=${2:-venenux/venenux-debianok}
-export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://ftp.hosteurope.de/mirror/archive.debian.org/debian/"}
+export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
 
 # Check if rebuild is needed:
-LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-i386/Packages.gz" | \
+LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-amd64/Packages.gz" | \
                  sed -n 's#^last-modified: *##pi' | \
                  sed -e 's#[^a-zA-Z0-9: -]##g')
 
