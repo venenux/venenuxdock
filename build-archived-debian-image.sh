@@ -49,7 +49,7 @@ EOF
            --cidfile=cif \
            debian-archived-builder \
            "mkdir '/debian-${DIST}' \
-           && debootstrap --no-check-gpg \
+           && debootstrap --verbose --no-check-gpg --merged-usr --no-check-certificate \
            '${DIST}' '/debian-${DIST}' \
            '${DEBIAN_MIRROR}'"
 
