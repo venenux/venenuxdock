@@ -16,6 +16,7 @@ fi
 export DIST=${1:-etch}
 export DOCKER_NAME=${2:-venenux/venenuxdock}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
+export ARCHT=${3:amd64}
 
 # Check if rebuild is needed:
 LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-amd64/Packages.gz" | \
@@ -27,6 +28,15 @@ echo "Last modification of source: ${LASTMOD}"
 docker pull "${DOCKER_NAME}:${DIST}" 2>/dev/null 1>&2 || true
 CURRENTLAST="$(docker inspect --format='{{ index .Config.Labels "last_modified_src"}}' \
                       "${DOCKER_NAME}:${DIST}" 2>/dev/null||echo 'non-existent')"
+
+case $(uname -m) in
+  x86_64*)
+        echo "Your kernel must be boot with  vsyscall=emulate to work this docker builds (ENTER TO CONTINUE AND IGNORE)";
+        read -t 50
+    ;;
+  *)
+    ;;
+esac
 
 if [ "${CURRENTLAST}" == "${LASTMOD}" ] ; then
     echo "Rebuild not needed - upstream has last modification ${LASTMOD}."
