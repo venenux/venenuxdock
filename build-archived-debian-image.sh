@@ -47,7 +47,7 @@ else
     # --privilege.
     #
     docker build -t debian-archived-builder . -f - <<EOF
-FROM debian:bookworm-slim
+FROM debian:testing
 RUN apt-get update && \
     apt-get install -y debootstrap
 ENTRYPOINT [ "/bin/bash", "-c" ]
@@ -59,7 +59,7 @@ EOF
            --cidfile=cif \
            debian-archived-builder \
            "mkdir '/debian-${DIST}' \
-           && debootstrap --verbose --no-check-gpg --merged-usr --no-check-certificate \
+           && debootstrap --verbose --no-check-gpg --no-check-certificate \
            '${DIST}' '/debian-${DIST}' \
            '${DEBIAN_MIRROR}'"
 
