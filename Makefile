@@ -3,7 +3,7 @@ DOCKER_NAME := venenux/venenuxdock
 all: build test
 
 build:
-	./build-archived-debian-image.sh $(DEBIAN_VERSION)
+	./build-archived-debian-image.sh $(DEBIAN_VERSION) $(DOCKER_NAME) $(DEBIAN_ARCH)
 
 test:
 	shellcheck -s ksh ./build-archived-debian-image.sh

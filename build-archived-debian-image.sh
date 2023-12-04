@@ -16,7 +16,7 @@ fi
 export DIST=${1:-etch}
 export DOCKER_NAME=${2:-venenux/venenuxdock}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
-export ARCHT=${3:amd64}
+export DEBIAN_ARCH=${3:amd64}
 
 # Check if rebuild is needed:
 LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-amd64/Packages.gz" | \
@@ -59,7 +59,7 @@ EOF
            --cidfile=cif \
            debian-archived-builder \
            "mkdir '/debian-${DIST}' \
-           && debootstrap --verbose --no-check-gpg --no-check-certificate \
+           && debootstrap --verbose --no-check-gpg --no-check-certificate --arch=${DEBIAN_ARCH} \
            '${DIST}' '/debian-${DIST}' \
            '${DEBIAN_MIRROR}'"
 
