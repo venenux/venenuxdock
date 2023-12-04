@@ -4,7 +4,7 @@ set -eE
 set -o pipefail
 
 export DIST=${1:-etch}
-export DOCKER_NAME=${2:-madworx/debian-archive}
+export DOCKER_NAME=${2:-venenux/venenux-debianok}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://ftp.hosteurope.de/mirror/archive.debian.org/debian/"}
 
 # Check if rebuild is needed:

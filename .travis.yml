@@ -17,7 +17,7 @@ before_install:
 script:
    - (make DEBIAN_VERSION=${DIST} &&
       is_travis_master_push &&
-      dockerhub_push_image madworx/debian-archive:${DIST}) || true
+      dockerhub_push_image venenux/venenux-debianok:${DIST}) || true
 
 jobs:
   include:
@@ -25,4 +25,4 @@ jobs:
       env: DIST
       script:
         - is_travis_master_push &&
-          dockerhub_set_description madworx/debian-archive README.md || true
+          dockerhub_set_description venenux/venenux-debianok README.md || true

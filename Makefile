@@ -1,4 +1,4 @@
-DOCKER_NAME := madworx/debian-archive
+DOCKER_NAME := venenux/venenux-debianok
 
 all: build test
 
