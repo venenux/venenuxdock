@@ -1,6 +1,6 @@
 # VenenuX Debian Docker images (older and newers)
 
-Currently, the following images will [be on Docker hub venenux-debianok](https://hub.docker.com/r/venenux/venenux-debianok):
+Currently, the following images will [be on Docker hub venenuxdock](https://hub.docker.com/r/venenux/venenuxdock):
 
   * Debian 4 Etch    (~2007 (Link to [debian.org](https://www.debian.org/releases/etch/)))
   * Debian 5 Lenny   (~2009 (Link to [debian.org](https://www.debian.org/releases/lenny/)))
@@ -26,7 +26,7 @@ the page at [oficial Debian Extended Long Term Support wiki page](https://wiki.d
 To use the VenenuX images just requested from docker hub:
 
 ```
-general@venenux:~$ docker run --rm -it venenux/venenux-debianok:etch
+general@venenux:~$ docker run --rm -it venenux/venenuxdock:etch
 sh-3.1# cat /etc/debian_version
 4.0
 ```

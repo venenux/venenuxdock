@@ -14,7 +14,7 @@ if ! command -v shellcheck > /dev/null; then
 fi
 
 export DIST=${1:-etch}
-export DOCKER_NAME=${2:-venenux/venenux-debianok}
+export DOCKER_NAME=${2:-venenux/venenuxdock}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
 
 # Check if rebuild is needed:

@@ -1,4 +1,4 @@
-DOCKER_NAME := venenux/venenux-debianok
+DOCKER_NAME := venenux/venenuxdock
 
 all: build test
 
