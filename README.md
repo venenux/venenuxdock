@@ -1,8 +1,6 @@
-[![Build Status](https://travis-ci.org/madworx/docker-debian-archive.svg?branch=master)](https://travis-ci.org/madworx/docker-debian-archive)
+# VenenuX Debian Docker images (older and newers)
 
-# Docker images for old (archived) Debian releases
-
-Currently, the following images are [available and automatically built on Docker hub](https://hub.docker.com/r/madworx/debian-archive/):
+Currently, the following images will [be on Docker hub venenux-debianok](https://hub.docker.com/r/venenux/venenux-debianok):
 
   * Debian 4 Etch    (~2007 (Link to [debian.org](https://www.debian.org/releases/etch/)))
   * Debian 5 Lenny   (~2009 (Link to [debian.org](https://www.debian.org/releases/lenny/)))
@@ -26,11 +24,11 @@ the page at [oficial Debian Extended Long Term Support wiki page](https://wiki.d
 ## Usage
 
 ```
-mad@maddev:~$ docker run --rm -it madworx/debian-archive:etch
+general@venenux:~$ docker run --rm -it venenux/venenux-debianok:etch
 sh-3.1# cat /etc/debian_version
 4.0
 ```
 
 ## Source
 
-Everything is hosted on [github](https://github.com/madworx/docker-debian-archive).
+Everything is hosted on [github](https://github.com/venenux/venenuxdock).
