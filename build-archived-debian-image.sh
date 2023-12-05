@@ -16,7 +16,6 @@ fi
 export DIST=${1:-etch}
 export DOCKER_NAME=${2:-venenux/venenuxdock}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
-export DEBIAN_ARCH=${3:amd64}
 
 # Check if rebuild is needed:
 LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-amd64/Packages.gz" | \
@@ -29,10 +28,11 @@ docker pull "${DOCKER_NAME}:${DIST}" 2>/dev/null 1>&2 || true
 CURRENTLAST="$(docker inspect --format='{{ index .Config.Labels "last_modified_src"}}' \
                       "${DOCKER_NAME}:${DIST}" 2>/dev/null||echo 'non-existent')"
 
+# check if you will have bugs with bootstrap recent kernels respect glibc/dietlibc
 case $(uname -m) in
   x86_64*)
         echo "Your kernel must be boot with  vsyscall=emulate to work this docker builds (ENTER TO CONTINUE AND IGNORE)";
-        read -t 50
+        read -rt 50
     ;;
   *)
     ;;
@@ -60,7 +60,7 @@ EOF
            --cidfile=cif \
            debian-archived-builder \
            "mkdir '/debian-${DIST}' \
-           && debootstrap --verbose --no-check-gpg --no-check-certificate --arch=${DEBIAN_ARCH} \
+           && debootstrap --verbose --no-check-gpg --no-check-certificate \
            '${DIST}' '/debian-${DIST}' \
            '${DEBIAN_MIRROR}'"
 
