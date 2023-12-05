@@ -39,10 +39,8 @@ case $(uname -m) in
 esac
 
 if [ "${CURRENTLAST}" == "${LASTMOD}" ] ; then
-    echo "Rebuild not needed - upstream has last modification ${LASTMOD}."
-    exit 1
-else
-    #
+    echo "Rebuild not needed - upstream has last modification ${LASTMOD}. DO YOU STILL WANTS TO BUILD?"
+    read -rt 50
     # We cannot build in one step, since the debootstrap process needs
     # --privilege.
     #
