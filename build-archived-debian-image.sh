@@ -76,8 +76,11 @@ FROM ${STAGE2_ID} AS build
 FROM scratch
 COPY --from=build /debian-${DIST} /
 ENV DEBIAN_FRONTEND noninteractive
+ENV LC_ALL C
+ENV LANGUAGE C
 LABEL maintainer="VenenuX"
 RUN echo "debian:${DIST}" > /etc/os-version.txt
+RUN echo "deb http://archive.debian.org/debian/ ${DIST} main contrib non-free\ndeb http://archive.debian.org/debian/ ${DIST}-backports main contrib non-free\ndeb http://archive.debian.org/debian-security/ ${DIST}/updates main contrib non-free" > /etc/apt/sources.list && apt-get update
 ENTRYPOINT [ "/bin/sh" ]
 EOF
     docker rm "${STAGE1_ID}"
