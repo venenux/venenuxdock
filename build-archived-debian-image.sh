@@ -48,6 +48,7 @@ else
     #
     docker build -t debian-archived-builder . -f - <<EOF
 FROM debian:testing
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get install -y debootstrap
 ENTRYPOINT [ "/bin/bash", "-c" ]
@@ -74,6 +75,8 @@ EOF
 FROM ${STAGE2_ID} AS build
 FROM scratch
 COPY --from=build /debian-${DIST} /
+ENV DEBIAN_FRONTEND noninteractive
+LABEL maintainer="VenenuX"
 RUN echo "debian:${DIST}" > /etc/os-version.txt
 ENTRYPOINT [ "/bin/sh" ]
 EOF
