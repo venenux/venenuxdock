@@ -21,7 +21,7 @@ fi
 export DIST=${1:-etch}
 export DOCKER_NAME=${2:-venenux/venenuxdock}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
-export DEBIAN_ARCH:="$(dpkg-architecture -qDEB_BUILD_ARCH)"
+#export DEBIAN_ARCH:="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 
 # Check if rebuild is needed:
 LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-amd64/Packages.gz" | \
@@ -85,8 +85,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C
 ENV LANGUAGE C
 LABEL maintainer="VenenuX"
-RUN echo "debian:${DIST}" > /etc/os-version.txt
-RUN echo -e "deb http://archive.debian.org/debian/ ${DIST} main contrib non-free\ndeb http://archive.debian.org/debian/ ${DIST}-backports main contrib non-free\ndeb http://archive.debian.org/debian-security/ ${DIST}/updates main contrib non-free" > /etc/apt/sources.list && apt-get update
+RUN /bin/echo "debian:${DIST}" > /etc/os-version.txt
+RUN /bin/echo -e "deb http://archive.debian.org/debian/ ${DIST} main contrib non-free\ndeb http://archive.debian.org/debian/ ${DIST}-backports main contrib non-free\ndeb http://archive.debian.org/debian-security/ ${DIST}/updates main contrib non-free" > /etc/apt/sources.list && apt-get update
 ENTRYPOINT [ "/bin/sh" ]
 EOF
     docker rm "${STAGE1_ID}"
