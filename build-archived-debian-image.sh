@@ -56,7 +56,7 @@ fi
 FROM debian:testing
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
-    apt-get install -y debootstrap
+    apt-get install -y cdebootstrap
 ENTRYPOINT [ "/bin/bash", "-c" ]
 EOF
 
@@ -66,8 +66,8 @@ EOF
            --cidfile=cif \
            debian-archived-builder \
            "mkdir '/debian-${DIST}' \
-           && debootstrap --verbose --no-check-gpg --no-check-certificate \
-           '${DIST}' '/debian-${DIST}' \
+           && cdebootstrap --verbose --allow-unauthenticated --exclude=exim4\
+           'Debian/${DIST}' '/debian-${DIST}' \
            '${DEBIAN_MIRROR}'"
 
     STAGE1_ID="$(cat cif ; rm cif)"
