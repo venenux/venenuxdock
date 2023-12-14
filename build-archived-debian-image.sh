@@ -21,7 +21,7 @@ fi
 export DIST=${1:-etch}
 export DOCKER_NAME=${2:-venenux/venenuxdock}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
-export DEBIAN_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
+export DEBIAN_ARCH:="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 
 # Check if rebuild is needed:
 LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-amd64/Packages.gz" | \
@@ -47,6 +47,7 @@ esac
 if [ "${CURRENTLAST}" == "${LASTMOD}" ] ; then
     echo "Rebuild not needed - upstream has last modification ${LASTMOD}. DO YOU STILL WANTS TO BUILD?"
     read -rt 50
+fi
     #
     # We cannot build in one step, since the debootstrap process needs
     # --privilege.
@@ -89,6 +90,5 @@ RUN echo -e "deb http://archive.debian.org/debian/ ${DIST} main contrib non-free
 ENTRYPOINT [ "/bin/sh" ]
 EOF
     docker rm "${STAGE1_ID}"
-fi
 
 
