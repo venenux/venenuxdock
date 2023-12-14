@@ -13,9 +13,15 @@ if ! command -v shellcheck > /dev/null; then
     exit 1
 fi
 
+if ! command -v dpkg-architecture > /dev/null; then
+    echo "[ERROR] dpkg-dev is not installed, cannot continue! make apt-get install dpkg-dev"
+    exit 1
+fi
+
 export DIST=${1:-etch}
 export DOCKER_NAME=${2:-venenux/venenuxdock}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
+export DEBIAN_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 
 # Check if rebuild is needed:
 LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-amd64/Packages.gz" | \
@@ -41,6 +47,7 @@ esac
 if [ "${CURRENTLAST}" == "${LASTMOD}" ] ; then
     echo "Rebuild not needed - upstream has last modification ${LASTMOD}. DO YOU STILL WANTS TO BUILD?"
     read -rt 50
+    #
     # We cannot build in one step, since the debootstrap process needs
     # --privilege.
     #
