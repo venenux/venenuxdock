@@ -1,5 +1,6 @@
 DOCKER_NAME := venenux/venenuxdock
 DEBIAN_ARCH := amd64
+DEBIAN_VERSION := jessie
 
 all: build test
 

@@ -18,7 +18,7 @@ if ! command -v dpkg-architecture > /dev/null; then
     exit 1
 fi
 
-export DIST=${1:-etch}
+export DIST=${1:-jessie}
 export DOCKER_NAME=${2:-venenux/venenuxdock}
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
 #export DEBIAN_ARCH:="$(dpkg-architecture -qDEB_BUILD_ARCH)"
