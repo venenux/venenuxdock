@@ -1,6 +1,6 @@
 DEBIAN_ARCH := amd64
-DOCKER_NAME := venenux/venenuxdock
 DEBIAN_VERSION := jessie
+DOCKER_NAME := venenux/venenuxdock-$(DEBIAN_VERSION)
 
 all: clean build test
 
@@ -15,4 +15,4 @@ push:
 	docker push $(DOCKER_NAME):$(DEBIAN_VERSION)
 
 clean:
-	docker image prune -a -f && docker rm -f -v $(DOCKER_NAME):$(DEBIAN_VERSION)
+	docker image prune -a -f && docker rmi -f $(DOCKER_NAME):$(DEBIAN_VERSION)
