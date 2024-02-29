@@ -23,6 +23,7 @@ if [ -n "$2" ]; then export DOCKER_NAME=${2}; else export DOCKER_NAME=venenux/ve
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
 DEBIAN_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 if [ -n "$3" ]; then export DEBIAN_ARCH=${3}; else export DEBIAN_ARCH=${DEBIAN_ARCH}; fi
+export DEBIAN_STAGE1=${4:-testing}
 
 # Check if rebuild is needed:
 LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-${DEBIAN_ARCH}/Packages.gz" | \
@@ -56,10 +57,10 @@ fi
     # --privilege.
     #
     docker build -t debian-archived-builder . -f - <<EOF
-FROM debian:testing
+FROM debian:${DEBIAN_STAGE1}
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
-    apt-get install -y cdebootstrap
+    apt-get install -y --force-yes cdebootstrap qemu-user-static
 ENTRYPOINT [ "/bin/bash", "-c" ]
 EOF
 
@@ -69,7 +70,7 @@ EOF
            --cidfile=cif \
            debian-archived-builder \
            "mkdir '/debian-${DIST}-${DEBIAN_ARCH}' \
-           && cdebootstrap --verbose --allow-unauthenticated --exclude=exim4 --arch=${DEBIAN_ARCH} \
+           && cdebootstrap --verbose --exclude=exim4 --arch=${DEBIAN_ARCH} --flavour=minimal --allow-unauthenticated --foreign \
            'Debian/${DIST}' '/debian-${DIST}-${DEBIAN_ARCH}' \
            '${DEBIAN_MIRROR}'"
 
