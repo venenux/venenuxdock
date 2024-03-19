@@ -19,7 +19,7 @@ if ! command -v dpkg-architecture > /dev/null; then
 fi
 
 export DIST=${1:-jessie}
-if [ -n "$2" ]; then export DOCKER_NAME=${2}; else export DOCKER_NAME=venenux/venenuxdock-${DIST}; fi
+if [ -n "$2" ]; then export DOCKER_NAME=${2}; else export DOCKER_NAME=venenux/debian-${DIST}; fi
 export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
 DEBIAN_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 if [ -n "$3" ]; then export DEBIAN_ARCH=${3}; else export DEBIAN_ARCH=${DEBIAN_ARCH}; fi

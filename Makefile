@@ -1,6 +1,6 @@
 DEBIAN_ARCH := amd64
 DEBIAN_VERSION := jessie
-DOCKER_NAME := venenux/venenuxdock-$(DEBIAN_VERSION)
+DOCKER_NAME := venenux/debian-$(DEBIAN_VERSION)
 DEBIAN_STAGE1 := testing
 
 all: clean build test
