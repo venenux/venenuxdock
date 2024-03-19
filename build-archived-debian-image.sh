@@ -94,9 +94,9 @@ EOF
            --cidfile=cif \
            debian-archived-builder \
            "mkdir '/debian-${DIST}-${DEBIAN_ARCH}' \
-           && cdebootstrap --verbose --exclude=exim4 --arch=${DEBIAN_ARCH} --flavour=minimal --allow-unauthenticated --foreign \
-           'Debian/${DIST}' '/debian-${DIST}-${DEBIAN_ARCH}' \
-           '${DEBIAN_MIRROR}'"
+           && cdebootstrap --verbose --exclude=exim4 --arch=${DEBIAN_ARCH} --flavour=minimal --allow-unauthenticated --foreign 'Debian/${DIST}' '/debian-${DIST}-${DEBIAN_ARCH}' '${DEBIAN_MIRROR}' \
+           && /bin/echo \"debian:${DIST}:${DEBIAN_ARCH}\" > /debian-${DIST}-${DEBIAN_ARCH}/etc/os-version.txt \
+           && /bin/echo -e \"deb ${DEBIAN_MIRROR} ${DIST} main contrib non-free\ndeb ${DEBIAN_MIRROR} ${DIST}-backports main contrib non-free\ndeb ${DEBIAN_MIRROR}-security ${DIST}/updates main contrib non-free\" > /etc/apt/sources.list && apt-get update || true"
 
     STAGE1_ID="$(cat cif ; rm cif)"
     STAGE2_ID="$(docker commit "${STAGE1_ID}")"
@@ -109,12 +109,6 @@ EOF
 FROM ${STAGE2_ID} AS build
 FROM scratch
 COPY --from=build /debian-${DIST}-${DEBIAN_ARCH} /
-ENV DEBIAN_FRONTEND noninteractive
-ENV LC_ALL C
-ENV LANGUAGE C
-LABEL maintainer="VenenuX"
-RUN /bin/echo "debian:${DIST}:${DEBIAN_ARCH}" > /etc/os-version.txt
-RUN /bin/echo -e "deb ${DEBIAN_MIRROR} ${DIST} main contrib non-free\ndeb ${DEBIAN_MIRROR} ${DIST}-backports main contrib non-free\ndeb ${DEBIAN_MIRROR}-security ${DIST}/updates main contrib non-free" > /etc/apt/sources.list && apt-get update || true
 ENTRYPOINT [ "/bin/sh" ]
 EOF
     docker rm "${STAGE1_ID}"
