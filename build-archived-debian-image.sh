@@ -20,10 +20,33 @@ fi
 
 export DIST=${1:-jessie}
 if [ -n "$2" ]; then export DOCKER_NAME=${2}; else export DOCKER_NAME=venenux/debian-${DIST}; fi
-export DEBIAN_MIRROR=${DEBIAN_MIRROR:="http://archive.debian.org/debian/"}
 DEBIAN_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
 if [ -n "$3" ]; then export DEBIAN_ARCH=${3}; else export DEBIAN_ARCH=${DEBIAN_ARCH}; fi
 export DEBIAN_STAGE1=${4:-testing}
+
+EXTRAREPO=""
+APT_OPTIONS="-o Acquire::AllowDowngradeToInsecureRepositories=true -o Acquire::AllowInsecureRepositories=true -o APT::Get::AllowUnauthenticated=true "
+# check target distro docker mirror detection
+case ${DIST} in
+    etch|lenny|squeeze|wheezy|jessie|stretch)
+DEBIAN_MIRROR="http://archive.debian.org/debian"
+    ;;
+    *)
+DEBIAN_MIRROR="http://ftp.br.debian.org/debian"
+    ;;
+esac
+# check base distro docker on older cases if targeted
+case ${DEBIAN_STAGE1} in
+    etch|lenny|squeeze|wheezy|jessie|stretch)
+DEBIAN_MIRROR_BASE=${DEBIAN_MIRROR}
+    ;;
+    *)
+DEBIAN_MIRROR_BASE="http://ftp.br.debian.org/debian"
+    ;;
+esac
+# so then configure the repository inside stage1 docker base
+EXTRAREPO="/bin/echo -e \"deb ${DEBIAN_MIRROR_BASE} ${DEBIAN_STAGE1} main contrib non-free\ndeb ${DEBIAN_MIRROR_BASE} ${DEBIAN_STAGE1}-backports main contrib non-free\" > /etc/apt/sources.list &&"
+
 
 # Check if rebuild is needed:
 LASTMOD=$(curl -sI "${DEBIAN_MIRROR}/dists/${DIST}/main/binary-${DEBIAN_ARCH}/Packages.gz" | \
@@ -59,8 +82,9 @@ fi
     docker build -t debian-archived-builder . -f - <<EOF
 FROM debian:${DEBIAN_STAGE1}
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && \
-    apt-get install -y --force-yes cdebootstrap qemu-user-static
+RUN ${EXTRAREPO} \
+    apt-get ${APT_OPTIONS} update && \
+    apt-get ${APT_OPTIONS} install -y --force-yes cdebootstrap qemu-user-static
 ENTRYPOINT [ "/bin/bash", "-c" ]
 EOF
 
@@ -90,7 +114,7 @@ ENV LC_ALL C
 ENV LANGUAGE C
 LABEL maintainer="VenenuX"
 RUN /bin/echo "debian:${DIST}:${DEBIAN_ARCH}" > /etc/os-version.txt
-RUN /bin/echo -e "deb http://archive.debian.org/debian/ ${DIST} main contrib non-free\ndeb http://archive.debian.org/debian/ ${DIST}-backports main contrib non-free\ndeb http://archive.debian.org/debian-security/ ${DIST}/updates main contrib non-free" > /etc/apt/sources.list && apt-get update
+RUN /bin/echo -e "deb ${DEBIAN_MIRROR} ${DIST} main contrib non-free\ndeb ${DEBIAN_MIRROR} ${DIST}-backports main contrib non-free\ndeb ${DEBIAN_MIRROR}-security ${DIST}/updates main contrib non-free" > /etc/apt/sources.list && apt-get update || true
 ENTRYPOINT [ "/bin/sh" ]
 EOF
     docker rm "${STAGE1_ID}"
