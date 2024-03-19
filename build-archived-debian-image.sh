@@ -45,7 +45,7 @@ DEBIAN_MIRROR_BASE="http://ftp.br.debian.org/debian"
     ;;
 esac
 # so then configure the repository inside stage1 docker base
-EXTRAREPO="/bin/echo -e \"deb ${DEBIAN_MIRROR_BASE} ${DEBIAN_STAGE1} main contrib non-free\ndeb ${DEBIAN_MIRROR_BASE} ${DEBIAN_STAGE1}-backports main contrib non-free\" > /etc/apt/sources.list &&"
+EXTRAREPO="/bin/echo -e \"deb ${DEBIAN_MIRROR_BASE} ${DEBIAN_STAGE1} main contrib non-free\ndeb ${DEBIAN_MIRROR_BASE} ${DEBIAN_STAGE1}-backports main contrib non-free\ndeb ${DEBIAN_MIRROR_BASE}-security ${DIST}/updates main contrib non-free\" > /etc/apt/sources.list &&"
 
 
 # Check if rebuild is needed:
@@ -83,7 +83,7 @@ fi
 FROM debian:${DEBIAN_STAGE1}
 ENV DEBIAN_FRONTEND noninteractive
 RUN ${EXTRAREPO} \
-    apt-get ${APT_OPTIONS} update && \
+    apt-get ${APT_OPTIONS} update || true && \
     apt-get ${APT_OPTIONS} install -y --force-yes cdebootstrap qemu-user-static
 ENTRYPOINT [ "/bin/bash", "-c" ]
 EOF
