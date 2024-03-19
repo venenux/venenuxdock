@@ -12,13 +12,10 @@ sudo: required
 services:
   - docker
 
-before_install:
-   - source <(curl https://raw.githubusercontent.com/madworx/cd-ci-glue/master/src/cd-ci-glue.bash)
-   
 script:
-   - (make DEBIAN_VERSION=${DIST} &&
+   - (make DEBIAN_VERSION=${DIST} DOCKER_NAME=venenux/debian-${DIST} &&
       is_travis_master_push &&
-      dockerhub_push_image venenux/venenuxdock:${DIST}) || true
+      dockerhub_push_image venenux/debian-${DIST}) || true
 
 jobs:
   include:
@@ -26,4 +23,4 @@ jobs:
       env: DIST
       script:
         - is_travis_master_push &&
-          dockerhub_set_description venenux/venenuxdock README.md || true
+          dockerhub_set_description venenux/debian-${DIST}) README.md || true

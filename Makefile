@@ -1,6 +1,6 @@
 DEBIAN_ARCH := amd64
 DEBIAN_VERSION := jessie
-DOCKER_NAME := venenux/debian-$(DEBIAN_VERSION)
+DOCKER_NAME := venenux/debian-$(DEBIAN_VERSION)-base
 DEBIAN_STAGE1 := testing
 
 all: clean build test
@@ -14,7 +14,7 @@ build:
 test: build
 	docker run $(DOCKER_NAME):$(DEBIAN_ARCH) -c 'echo `cat /etc/os-version.txt` ok'
 
-push:
+push: build
 	docker push $(DOCKER_NAME):$(DEBIAN_ARCH)
 
 clean:
